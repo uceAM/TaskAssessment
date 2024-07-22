@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskAssessment.Data;
+using TaskAssessment.Interfaces;
 using TaskAssessment.Models;
+using TaskAssessment.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddIdentity<WebUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = true;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddAuthentication();
+builder.Services.AddScoped<ITicketRepostiory,TicketRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionString"));

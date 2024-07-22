@@ -20,17 +20,17 @@ public class ApplicationDbContext : IdentityDbContext<WebUser>
             new IdentityRole()
             {
                 Name = RoleEnum.employee.ToString(),
-                NormalizedName = RoleEnum.employee.ToString(),
+                NormalizedName = RoleEnum.employee.ToString().ToUpper(),
             },
             new IdentityRole()
             {
                Name = RoleEnum.manager.ToString(),
-               NormalizedName = RoleEnum.manager.ToString(),
+               NormalizedName = RoleEnum.manager.ToString().ToUpper(),
             },
             new IdentityRole()
             {
                Name = RoleEnum.admin.ToString(),
-               NormalizedName = RoleEnum.admin.ToString(),
+               NormalizedName = RoleEnum.admin.ToString().ToUpper(),
             },
 
         };

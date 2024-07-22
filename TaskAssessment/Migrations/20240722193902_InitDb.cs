@@ -173,6 +173,7 @@ namespace TaskAssessment.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "varchar", nullable: false),
                     Status = table.Column<string>(type: "varchar", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     WebUserId = table.Column<string>(type: "text", nullable: true)
                 },
@@ -257,9 +258,9 @@ namespace TaskAssessment.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0a70f303-cadd-4b79-95ab-f7c290e2847f", "65af618a-c53a-4736-835d-8fafad8b136c", "employee", "EMPLOYEE" },
-                    { "421af02f-66e3-4ab0-82d1-1f7aec0c1113", "51efaf98-1cea-437c-b801-b7d676201eca", "manager", "MANAGER" },
-                    { "69217c6d-a143-4426-9f9d-602c3c48dc71", "9bc98cf3-57ec-4e22-a732-0df7702fdf37", "admin", "ADMIN" }
+                    { "1a7ee31d-5bf4-4dd3-8251-71a63da6d394", "202cb4fe-0329-4dbf-8859-f1451759e4bb", "admin", "ADMIN" },
+                    { "97e5ed57-8ada-4813-af54-aeeb4d23e616", "06b2ebff-813d-42e3-a07b-4c03de781df9", "employee", "EMPLOYEE" },
+                    { "f5947a0c-c87a-4a63-b5a5-510e841e17e2", "2f8c3d05-d9ce-4477-b755-d974ee05910e", "manager", "MANAGER" }
                 });
 
             migrationBuilder.CreateIndex(

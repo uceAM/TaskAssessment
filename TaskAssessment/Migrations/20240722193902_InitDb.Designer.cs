@@ -12,7 +12,7 @@ using TaskAssessment.Data;
 namespace TaskAssessment.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240722180952_InitDb")]
+    [Migration("20240722193902_InitDb")]
     partial class InitDb
     {
         /// <inheritdoc />
@@ -53,22 +53,22 @@ namespace TaskAssessment.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0a70f303-cadd-4b79-95ab-f7c290e2847f",
-                            ConcurrencyStamp = "65af618a-c53a-4736-835d-8fafad8b136c",
+                            Id = "97e5ed57-8ada-4813-af54-aeeb4d23e616",
+                            ConcurrencyStamp = "06b2ebff-813d-42e3-a07b-4c03de781df9",
                             Name = "employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "421af02f-66e3-4ab0-82d1-1f7aec0c1113",
-                            ConcurrencyStamp = "51efaf98-1cea-437c-b801-b7d676201eca",
+                            Id = "f5947a0c-c87a-4a63-b5a5-510e841e17e2",
+                            ConcurrencyStamp = "2f8c3d05-d9ce-4477-b755-d974ee05910e",
                             Name = "manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "69217c6d-a143-4426-9f9d-602c3c48dc71",
-                            ConcurrencyStamp = "9bc98cf3-57ec-4e22-a732-0df7702fdf37",
+                            Id = "1a7ee31d-5bf4-4dd3-8251-71a63da6d394",
+                            ConcurrencyStamp = "202cb4fe-0329-4dbf-8859-f1451759e4bb",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -211,6 +211,9 @@ namespace TaskAssessment.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")

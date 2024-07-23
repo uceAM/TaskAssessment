@@ -1,48 +1,104 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using TaskAssessment.Data;
 using TaskAssessment.Dto.Ticket;
 using TaskAssessment.Interfaces;
 using TaskAssessment.Models;
+using static TaskAssessment.Data.Constants.Enums;
 
-namespace TaskAssessment.Controllers
+namespace TaskAssessment.Controllers;
+
+[Route("api/tickets")]
+[ApiController]
+public class TicketController : ControllerBase
 {
-    [Route("api/tickets")]
-    [ApiController]
-    public class TicketController : ControllerBase
+    private readonly UserManager<WebUser> _userManager;
+    private readonly ITicketRepostiory _ticketRepo;
+    public TicketController(UserManager<WebUser> userManger,ITicketRepostiory ticketRepo)
     {
-        private readonly UserManager<WebUser> _userManager;
-        private readonly ITicketRepostiory _repo;
-        public TicketController(UserManager<WebUser> UserManger,ITicketRepostiory repo)
+        _userManager = userManger;
+        _ticketRepo = ticketRepo;
+    }
+    [HttpPost]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> CreateTicket([FromBody] TicketDto newData)
+    {
+        if (!ModelState.IsValid || newData == null)
         {
-            _userManager = UserManger;
-            _repo = repo;
+            return BadRequest(ModelState);
         }
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateTicket([FromBody] TicketDto TicketDto)
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == newData.UserName.ToLower());
+        if (user == null)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == TicketDto.UserName.ToLower());
-            if (user == null)
-            {
-                return Unauthorized("Username not registered");
-            }
-            var creatingTicket = new Ticket()
-            {
-
-                Name = TicketDto.Name,
-                DueDate = TicketDto.DueDate
-            };
-            if (await _repo.AddTicket(creatingTicket))
-            return Ok(creatingTicket);
-            return BadRequest();
+            return Unauthorized("Username not registered");
         }
+        var creatingTicket = new Ticket()
+        {
+            Name = newData.Name,
+            DueDate = newData.DueDate
+        };
+        if (await _ticketRepo.AddTicket(creatingTicket))
+        return Ok(newData);
+        return BadRequest();
+    }
+    [HttpDelete("{id:int}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> DeleteTicket(int id)
+    {
+        var dbTicket = await _ticketRepo.GetById(id);
+        if (dbTicket == null)
+            return NotFound($"Ticket with id {id} does not exist");
+        if (await _ticketRepo.RemoveTicket(dbTicket))
+            return Ok($"Deleted {dbTicket.Name}");
+        return BadRequest();
+    }
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> UpdateTicket([FromRoute] int id, [FromBody] TicketDto updateData)
+    {
+        if (id < 0 || updateData == null || !ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var dbTicket = await _ticketRepo.GetById(id);
+        if (dbTicket == null)
+            return NotFound();
+        if(await _ticketRepo.UpdateTicket(dbTicket, updateData))
+        return Ok();
+        return BadRequest();
+    }
+    [HttpPut("status/{id:int}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> UpdateTicketStatus(int id,[FromQuery,BindRequired] string status)
+    {
+        if (id < 0 || string.IsNullOrEmpty(status) || !ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var statusCheck = false;
+        foreach (var validStatus in Enum.GetNames(typeof(StatusEnum))){
+            if (status.ToLower() == validStatus)
+            {
+                statusCheck = true;
+                break;
+            }
+        }
+        if (statusCheck)
+        {
+            var dbTicket = await _ticketRepo.GetById(id);
+            if(dbTicket == null)
+            {
+                return NotFound($"Ticket with {id} does not exist in the DB");
+            }
+            await _ticketRepo.UpdateStatus(dbTicket, status);
+            return Ok($"{dbTicket.Name} updated with {dbTicket.Status}");
+        }
+        return BadRequest("Status cannot be validated"); //ideally never reach this
     }
 }

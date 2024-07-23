@@ -1,4 +1,5 @@
-﻿using TaskAssessment.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskAssessment.Data;
 using TaskAssessment.Dto.Ticket;
 using TaskAssessment.Interfaces;
 using TaskAssessment.Models;
@@ -16,18 +17,27 @@ public class TicketRepository : ITicketRepostiory
     {
         try
         {
-            await _context.AddAsync(Ticket);
+            await _context.Tickets.AddAsync(Ticket);
             await _context.SaveChangesAsync();
             return true;
-        } catch (Exception ex)
+        } catch (Exception)
         {
             return false;
         }
     }
 
-    public Task<bool> DeleteTicket(int TicketId)
+    public async Task<bool> RemoveTicket(Ticket Ticket)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _context.Tickets.Remove(Ticket);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     public Task<ICollection<Ticket>> ListMyTickets()
@@ -40,8 +50,37 @@ public class TicketRepository : ITicketRepostiory
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpdateTicket(Ticket Ticket)
+    public async Task<bool> UpdateTicket(Ticket Ticket, TicketDto TicketDto)
     {
-        throw new NotImplementedException();
+        Ticket.Name = TicketDto.Name;
+        Ticket.DueDate = TicketDto.DueDate;
+        try
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        } catch(Exception)
+        {
+            return false;
+        }
+        
+    }
+
+    public async Task<Ticket?> GetById(int TicketId)
+    {
+        return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == TicketId);
+    }
+
+    public async Task<bool> UpdateStatus(Ticket Ticket, string status)
+    {
+        Ticket.Status = status;
+        try
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }catch(Exception)
+        {
+            return false;
+        }
+        
     }
 }

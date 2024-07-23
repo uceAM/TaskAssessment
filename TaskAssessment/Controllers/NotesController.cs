@@ -51,7 +51,7 @@ namespace TaskAssessment.Controllers
             var creatingNote = new Note()
             {
                 Text = newNote.Text,
-                Ticket = ticket,
+                TicketId = ticketId,
             };
             if (await _noteRepository.AddNote(creatingNote))
             {
@@ -60,6 +60,7 @@ namespace TaskAssessment.Controllers
             return StatusCode(500, new { Error = "DB Error" });
         }
         [HttpPut("{id:int}")]
+        [Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateNote([FromRoute] int id, [FromBody] NoteDto updateData)
@@ -76,6 +77,7 @@ namespace TaskAssessment.Controllers
             return BadRequest();
         }
         [HttpDelete("{id:int}")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteNote(int id)

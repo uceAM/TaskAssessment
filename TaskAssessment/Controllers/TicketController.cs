@@ -47,6 +47,7 @@ public class TicketController : ControllerBase
         return BadRequest();
     }
     [HttpDelete("{id:int}")]
+    [Authorize]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> DeleteTicket(int id)
@@ -59,6 +60,7 @@ public class TicketController : ControllerBase
         return BadRequest();
     }
     [HttpPut("{id:int}")]
+    [Authorize]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> UpdateTicket([FromRoute] int id, [FromBody] TicketDto updateData)
@@ -75,6 +77,7 @@ public class TicketController : ControllerBase
         return BadRequest();
     }
     [HttpPut("status/{id:int}")]
+    [Authorize]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> UpdateTicketStatus(int id, [FromQuery, BindRequired] string status)

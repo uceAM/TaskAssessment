@@ -22,7 +22,7 @@ public class TicketController : ControllerBase
         _ticketRepo = ticketRepo;
     }
     [HttpPost]
-    [Authorize(Roles = RolesConstants.manager)]
+    [Authorize]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]

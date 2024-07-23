@@ -16,7 +16,7 @@ public class AccountController : ControllerBase
     private readonly SignInManager<WebUser> _signInManager;
     private readonly UserManager<WebUser> _userManager;
     private readonly ITokenService _tokenService;
-    public AccountController(SignInManager<WebUser> SignInManager, UserManager<WebUser> UserManager,ITokenService tokenService)
+    public AccountController(SignInManager<WebUser> SignInManager, UserManager<WebUser> UserManager, ITokenService tokenService)
     {
         _signInManager = SignInManager;
         _userManager = UserManager;
@@ -142,12 +142,18 @@ public class AccountController : ControllerBase
         {
             return Unauthorized("Username not registered");
         }
+        var roles = await _userManager.GetRolesAsync(user);
+        var role = roles[0];
+        if (role == null)
+        {
+            return StatusCode(500, new { error = "No Role found" }); //fatal error
+        }
         var signInObj = await _signInManager.CheckPasswordSignInAsync(user, LoginDetails.Password, false);
         if (!signInObj.Succeeded)
         {
             return Unauthorized("Username or Password is incorrect");
         }
-        var token = _tokenService.CreateToken(user);
+        var token = _tokenService.CreateToken(user, role);
         return Ok(token);
 
     }

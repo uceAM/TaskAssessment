@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -16,11 +17,12 @@ namespace TaskAssessment.Services
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(s: _config["JWT:SigningKey"]));
         }
-        public string CreateToken(WebUser user)
+        public string CreateToken(WebUser user, string role)
         {
             List<Claim> claims = new()
         {
             new Claim(JwtRegisteredClaimNames.Name,user.UserName),
+            new Claim(ClaimTypes.Role, role)
         };
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512);
             var tokenDescriptor = new SecurityTokenDescriptor()

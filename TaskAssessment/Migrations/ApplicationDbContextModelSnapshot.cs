@@ -50,22 +50,22 @@ namespace TaskAssessment.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "97e5ed57-8ada-4813-af54-aeeb4d23e616",
-                            ConcurrencyStamp = "06b2ebff-813d-42e3-a07b-4c03de781df9",
+                            Id = "b6edfc51-6be5-4f33-a9da-b28acbf32e54",
+                            ConcurrencyStamp = "3798813b-32a5-4e3e-a6c3-f0d20e9384c9",
                             Name = "employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "f5947a0c-c87a-4a63-b5a5-510e841e17e2",
-                            ConcurrencyStamp = "2f8c3d05-d9ce-4477-b755-d974ee05910e",
+                            Id = "25bea0b3-66b3-4389-991c-41664d35f3f7",
+                            ConcurrencyStamp = "e285601e-f59e-495d-910c-d0528020ae93",
                             Name = "manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "1a7ee31d-5bf4-4dd3-8251-71a63da6d394",
-                            ConcurrencyStamp = "202cb4fe-0329-4dbf-8859-f1451759e4bb",
+                            Id = "72916736-1efd-40a1-96a0-c8af590c6f9d",
+                            ConcurrencyStamp = "13fa8be2-c26f-440e-b9f4-0caaecef2586",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });

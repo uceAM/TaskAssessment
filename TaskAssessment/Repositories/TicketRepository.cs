@@ -62,7 +62,6 @@ public class TicketRepository : ITicketRepostiory
         {
             return false;
         }
-        
     }
 
     public async Task<Ticket?> GetById(int TicketId)

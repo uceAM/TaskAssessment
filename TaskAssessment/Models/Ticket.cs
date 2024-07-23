@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TaskAssessment.Dto.Ticket;
-using static TaskAssessment.Data.Constants.Enums;
+using TaskAssessment.Data.Constants;
 
 namespace TaskAssessment.Models;
 
@@ -13,7 +12,7 @@ public class Ticket
     public string Name { get; set; }
     [Required]
     [Column(TypeName = "varchar")]
-    public string Status { get; set; } = StatusEnum.pending.ToString();
+    public string Status { get; set; } = StatusConstants.pending;
     [Required]
     public DateTime DueDate { get; set; }
     [Required]

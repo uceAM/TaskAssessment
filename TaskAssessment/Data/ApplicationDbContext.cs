@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TaskAssessment.Models;
-using static TaskAssessment.Data.Constants.Enums;
+using TaskAssessment.Data.Constants;
 
 namespace TaskAssessment.Data;
 
@@ -19,18 +19,18 @@ public class ApplicationDbContext : IdentityDbContext<WebUser>
         {
             new IdentityRole()
             {
-                Name = RoleEnum.employee.ToString(),
-                NormalizedName = RoleEnum.employee.ToString().ToUpper(),
+                Name = RolesConstants.employee,
+                NormalizedName = RolesConstants.employee.ToUpper(),
             },
             new IdentityRole()
             {
-               Name = RoleEnum.manager.ToString(),
-               NormalizedName = RoleEnum.manager.ToString().ToUpper(),
+               Name = RolesConstants.manager,
+               NormalizedName = RolesConstants.manager.ToUpper(),
             },
             new IdentityRole()
             {
-               Name = RoleEnum.admin.ToString(),
-               NormalizedName = RoleEnum.admin.ToString().ToUpper(),
+               Name =RolesConstants.admin,
+               NormalizedName = RolesConstants.admin.ToUpper(),
             },
 
         };

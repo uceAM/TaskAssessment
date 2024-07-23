@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskAssessment.Dto.Account;
@@ -146,7 +145,7 @@ public class AccountController : ControllerBase
         var role = roles[0];
         if (role == null)
         {
-            return StatusCode(500, new { error = "No Role found" }); //fatal error
+            return StatusCode(500, new { error = "No Role found for user" }); //Fatal error. Should be assigned employee by default
         }
         var signInObj = await _signInManager.CheckPasswordSignInAsync(user, LoginDetails.Password, false);
         if (!signInObj.Succeeded)

@@ -7,6 +7,7 @@ public class Upload
     [Key]
     public int Id { get; set; }
     public int TicketId { get; set; }
+    public Ticket Ticket { get; set; }
     public string Name { get; set; }
     [Required]
     public string path { get; set; }

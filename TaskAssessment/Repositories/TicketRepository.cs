@@ -20,7 +20,8 @@ public class TicketRepository : ITicketRepostiory
             await _context.Tickets.AddAsync(Ticket);
             await _context.SaveChangesAsync();
             return true;
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             return false;
         }
@@ -58,7 +59,8 @@ public class TicketRepository : ITicketRepostiory
         {
             await _context.SaveChangesAsync();
             return true;
-        } catch(Exception)
+        }
+        catch (Exception)
         {
             return false;
         }
@@ -76,10 +78,36 @@ public class TicketRepository : ITicketRepostiory
         {
             await _context.SaveChangesAsync();
             return true;
-        }catch(Exception)
+        }
+        catch (Exception)
         {
             return false;
         }
-        
+
+    }
+
+    public async Task<ICollection<ReportDto>> GetReports(DateTime StartDate, string Interval)
+    {
+        DateTime? endDate = null;
+        switch (Interval)
+        {
+            case "week":
+                {
+                    endDate = StartDate.AddDays(7);
+                }
+                break;
+            case "month":
+                {
+                    endDate = StartDate.AddDays(30);
+                }
+                break;
+        }
+        return _context.Tickets.Where(x => x.DueDate >= StartDate && x.DueDate <= endDate).Select(t => new ReportDto
+        {
+            Name = t.Name,
+            UserName = t.WebUser.UserName,
+            DueDate = t.DueDate,
+            Status = t.Status
+        }).ToList();
     }
 }

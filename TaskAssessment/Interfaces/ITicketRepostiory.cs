@@ -12,4 +12,5 @@ public interface ITicketRepostiory
     public Task<bool> UpdateTicket(Ticket Ticket,TicketDto TicketDto);
     public Task<bool> RemoveTicket(Ticket Ticket);
     public Task<bool> UpdateStatus(Ticket Ticket, string status);
+    public Task<ICollection<ReportDto>> GetReports(DateTime StartDate, string Interval);
 }

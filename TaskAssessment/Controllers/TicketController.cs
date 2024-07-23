@@ -40,6 +40,7 @@ public class TicketController : ControllerBase
         var creatingTicket = new Ticket()
         {
             Name = newData.Name,
+            WebUser = user,
             DueDate = newData.DueDate
         };
         if (await _ticketRepo.AddTicket(creatingTicket))
@@ -98,6 +99,19 @@ public class TicketController : ControllerBase
             return Ok($"{dbTicket.Name} updated with {dbTicket.Status}");
         }
         return BadRequest("Status cannot be validated"); //ideally never reach this
-    }     
+    }
+    [HttpGet("/reports")]
+    [Authorize(Roles =RolesConstants.admin)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> GenerateReport([FromQuery, BindRequired] DateTime StartDate,[FromQuery,BindRequired]string Interval)
+    {
+        if (Interval.ToLower() == "week" || Interval.ToLower() == "month")
+        {
+            var reports = await _ticketRepo.GetReports(StartDate, Interval);
+            return Ok(reports);
+        }
+        return BadRequest();
+    }
 }
 

@@ -10,5 +10,6 @@ namespace TaskAssessment.Models
         [Column(TypeName = "varchar")]
         public string Text { get; set; }
         public int TicketId { get; set; }
+        public Ticket Ticket { get; set; }
     }
 }

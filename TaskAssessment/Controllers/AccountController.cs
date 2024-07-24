@@ -22,10 +22,28 @@ public class AccountController : ControllerBase
         _tokenService = tokenService;
     }
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] AccountDto NewAccount)
+    public async Task<IActionResult> CreateUser([FromBody] AccountDto NewAccount, string role)
     {
         try
         {
+            var assigningRole = RolesConstants.employee;
+            switch (role)
+            {
+                case RolesConstants.manager:
+                    {
+                        assigningRole = RolesConstants.manager;
+                        break;
+                    }
+                case RolesConstants.admin:
+                    {
+                        assigningRole = RolesConstants.admin;
+                        break;
+                    }
+                default:
+                    {
+                        break; //assign as employee
+                    }
+            }
             if (!ModelState.IsValid || NewAccount.Password == null)
             {
                 return BadRequest(ModelState);
@@ -42,7 +60,7 @@ public class AccountController : ControllerBase
                 return StatusCode(500, createdUser.Errors);
             }
 
-            var createdRole = await _userManager.AddToRoleAsync(creatingUser, RolesConstants.employee);
+            var createdRole = await _userManager.AddToRoleAsync(creatingUser, assigningRole);
             if (!createdRole.Succeeded)
             {
                 return StatusCode(500, createdRole.Errors);
@@ -56,76 +74,7 @@ public class AccountController : ControllerBase
         }
 
     }
-    [HttpPost("create-manager")]
-    public async Task<IActionResult> CreateManager([FromBody] AccountDto NewAccount)
-    {
-        try
-        {
-            if (!ModelState.IsValid || NewAccount.Password == null)
-            {
-                return BadRequest(ModelState);
-            }
 
-            WebUser creatingUser = new()
-            {
-                UserName = NewAccount.UserName,
-            };
-
-            var createdUser = await _userManager.CreateAsync(creatingUser, NewAccount.Password);
-            if (!createdUser.Succeeded)
-            {
-                return StatusCode(500, createdUser.Errors);
-            }
-
-            var createdRole = await _userManager.AddToRoleAsync(creatingUser, RolesConstants.manager);
-            if (!createdRole.Succeeded)
-            {
-                return StatusCode(500, createdRole.Errors);
-            }
-
-            return Ok($"Manager {creatingUser.UserName} created");
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
-
-    }
-    [HttpPost("create-admin")]
-    public async Task<IActionResult> CreateAdmin([FromBody] AccountDto NewAccount)
-    {
-        try
-        {
-            if (!ModelState.IsValid || NewAccount.Password == null)
-            {
-                return BadRequest(ModelState);
-            }
-
-            WebUser creatingUser = new()
-            {
-                UserName = NewAccount.UserName,
-            };
-
-            var createdUser = await _userManager.CreateAsync(creatingUser, NewAccount.Password);
-            if (!createdUser.Succeeded)
-            {
-                return StatusCode(500, createdUser.Errors);
-            }
-
-            var createdRole = await _userManager.AddToRoleAsync(creatingUser, RolesConstants.admin);
-            if (!createdRole.Succeeded)
-            {
-                return StatusCode(500, createdRole.Errors);
-            }
-
-            return Ok($"Admin {creatingUser.UserName} created");
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
-
-    }
     [HttpPost("login")]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]

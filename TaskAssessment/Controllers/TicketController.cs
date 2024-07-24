@@ -123,7 +123,7 @@ public class TicketController : ControllerBase
         var name =  User.GetUsername();
         var manager = await _userManager.FindByNameAsync(name);
         var tickets = await _ticketRepo.ListTeamTickets(manager.Id);
-        return Ok(name);
+        return Ok(tickets);
     }
     [HttpGet]
     [Authorize]
@@ -134,7 +134,7 @@ public class TicketController : ControllerBase
         var name = User.GetUsername();
         var user = await _userManager.FindByNameAsync(name);
         var tickets = await _ticketRepo.ListTeamTickets(user.Id);
-        return Ok(name);
+        return Ok(tickets);
     }
 
 }

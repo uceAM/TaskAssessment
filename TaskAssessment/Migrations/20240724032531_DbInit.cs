@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TaskAssessment.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class DbInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -208,31 +208,6 @@ namespace TaskAssessment.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TicketUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    WebUserId = table.Column<string>(type: "text", nullable: true),
-                    TicketId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TicketUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TicketUsers_AspNetUsers_WebUserId",
-                        column: x => x.WebUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TicketUsers_Tickets_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "Tickets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Uploads",
                 columns: table => new
                 {
@@ -258,9 +233,9 @@ namespace TaskAssessment.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "25bea0b3-66b3-4389-991c-41664d35f3f7", "e285601e-f59e-495d-910c-d0528020ae93", "manager", "MANAGER" },
-                    { "72916736-1efd-40a1-96a0-c8af590c6f9d", "13fa8be2-c26f-440e-b9f4-0caaecef2586", "admin", "ADMIN" },
-                    { "b6edfc51-6be5-4f33-a9da-b28acbf32e54", "3798813b-32a5-4e3e-a6c3-f0d20e9384c9", "employee", "EMPLOYEE" }
+                    { "50f8bee7-9c41-40c2-9cf7-c60cabd0da55", "19669db8-8767-4fe5-bf0f-ea531fc4fe10", "manager", "MANAGER" },
+                    { "8cfbabdc-6a7f-4cef-a0a0-aa8c98150c88", "342cf0cd-ff25-45f0-82c1-eea14ac116c3", "employee", "EMPLOYEE" },
+                    { "e3768cdb-a9fd-4725-8ec6-5addaa61c989", "a7d9e360-49b3-4fdd-9493-71dc9767a70f", "admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -316,16 +291,6 @@ namespace TaskAssessment.Migrations
                 column: "WebUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TicketUsers_TicketId",
-                table: "TicketUsers",
-                column: "TicketId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TicketUsers_WebUserId",
-                table: "TicketUsers",
-                column: "WebUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Uploads_TicketId",
                 table: "Uploads",
                 column: "TicketId");
@@ -351,9 +316,6 @@ namespace TaskAssessment.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notes");
-
-            migrationBuilder.DropTable(
-                name: "TicketUsers");
 
             migrationBuilder.DropTable(
                 name: "Uploads");

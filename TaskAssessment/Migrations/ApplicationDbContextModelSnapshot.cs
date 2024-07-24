@@ -50,22 +50,22 @@ namespace TaskAssessment.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b6edfc51-6be5-4f33-a9da-b28acbf32e54",
-                            ConcurrencyStamp = "3798813b-32a5-4e3e-a6c3-f0d20e9384c9",
+                            Id = "8cfbabdc-6a7f-4cef-a0a0-aa8c98150c88",
+                            ConcurrencyStamp = "342cf0cd-ff25-45f0-82c1-eea14ac116c3",
                             Name = "employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "25bea0b3-66b3-4389-991c-41664d35f3f7",
-                            ConcurrencyStamp = "e285601e-f59e-495d-910c-d0528020ae93",
+                            Id = "50f8bee7-9c41-40c2-9cf7-c60cabd0da55",
+                            ConcurrencyStamp = "19669db8-8767-4fe5-bf0f-ea531fc4fe10",
                             Name = "manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "72916736-1efd-40a1-96a0-c8af590c6f9d",
-                            ConcurrencyStamp = "13fa8be2-c26f-440e-b9f4-0caaecef2586",
+                            Id = "e3768cdb-a9fd-4725-8ec6-5addaa61c989",
+                            ConcurrencyStamp = "a7d9e360-49b3-4fdd-9493-71dc9767a70f",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -231,29 +231,6 @@ namespace TaskAssessment.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("TaskAssessment.Models.TicketUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("WebUserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TicketId");
-
-                    b.HasIndex("WebUserId");
-
-                    b.ToTable("TicketUsers");
-                });
-
             modelBuilder.Entity("TaskAssessment.Models.Upload", b =>
                 {
                     b.Property<int>("Id")
@@ -416,23 +393,6 @@ namespace TaskAssessment.Migrations
                     b.HasOne("TaskAssessment.Models.WebUser", "WebUser")
                         .WithMany("Ticket")
                         .HasForeignKey("WebUserId");
-
-                    b.Navigation("WebUser");
-                });
-
-            modelBuilder.Entity("TaskAssessment.Models.TicketUser", b =>
-                {
-                    b.HasOne("TaskAssessment.Models.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskAssessment.Models.WebUser", "WebUser")
-                        .WithMany()
-                        .HasForeignKey("WebUserId");
-
-                    b.Navigation("Ticket");
 
                     b.Navigation("WebUser");
                 });

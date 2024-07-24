@@ -6,6 +6,8 @@ using TaskAssessment.Interfaces;
 using TaskAssessment.Models;
 using TaskAssessment.Data.Constants;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Authorization;
+using TaskAssessment.Extensions;
 
 namespace TaskAssessment.Controllers;
 
@@ -16,11 +18,13 @@ public class AccountController : ControllerBase
     private readonly SignInManager<WebUser> _signInManager;
     private readonly UserManager<WebUser> _userManager;
     private readonly ITokenService _tokenService;
-    public AccountController(SignInManager<WebUser> SignInManager, UserManager<WebUser> UserManager, ITokenService tokenService)
+    private readonly IAssignTeamService _assignTeamService;
+    public AccountController(SignInManager<WebUser> SignInManager, UserManager<WebUser> UserManager, ITokenService tokenService, IAssignTeamService assignTeamService)
     {
         _signInManager = SignInManager;
         _userManager = UserManager;
         _tokenService = tokenService;
+        _assignTeamService = assignTeamService;
     }
     [HttpPost("create")]
     public async Task<IActionResult> CreateUser([FromBody] AccountDto NewAccount, [FromQuery,BindRequired]string role)
@@ -104,6 +108,33 @@ public class AccountController : ControllerBase
         }
         var token = _tokenService.CreateToken(user, role);
         return Ok(token);
+
+    }
+    [HttpPost("assign-team")]
+    [Authorize(Roles = $"{RolesConstants.manager},{RolesConstants.admin}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> AssignToTeam([FromQuery,BindRequired]string username)
+    {
+        if (User.IsInRole(RolesConstants.admin))
+        {
+            return Ok("This endpoint is for managers only");
+        }
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var name = User.GetUsername();
+        var manager = await _userManager.FindByNameAsync(name);
+        var assigningUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == username.ToLower());
+        if (assigningUser == null)
+        {
+            return Unauthorized("Username not registered");
+        }
+        if(await _assignTeamService.AssignToTeam(manager,assigningUser))
+        return Ok($"{assigningUser.UserName} assigned to {manager.UserName}'s team");
+        return StatusCode(500, new { Error = "team not assigned please try again later" });
 
     }
 }

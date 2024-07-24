@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskAssessment.Data;
+using TaskAssessment.Dto.Upload;
 using TaskAssessment.Interfaces;
 using TaskAssessment.Models;
 
@@ -40,8 +41,13 @@ public class UploadRepository : IUploadRepository
         }
     }
 
-    public async Task<ICollection<Upload>> GetUploads(int ticketId)
+    public async Task<Upload?> GetById(int id)
     {
-        throw new NotImplementedException();
+        return await _context.Uploads.FirstOrDefaultAsync(t => t.Id == id);
+    }
+
+    public async Task<ICollection<UploadDto>> GetUploads(int ticketId)
+    {
+        return await _context.Uploads.Where(u => u.TicketId == ticketId).Select(t => new UploadDto { Name = t.Name,path = t.path }).ToListAsync();
     }
 }

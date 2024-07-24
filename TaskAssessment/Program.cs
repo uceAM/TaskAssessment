@@ -79,6 +79,7 @@ builder.Services.AddAuthentication(
 builder.Services.AddScoped<ITicketRepostiory,TicketRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
+builder.Services.AddScoped<IUploadRepository, UploadRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionString"));

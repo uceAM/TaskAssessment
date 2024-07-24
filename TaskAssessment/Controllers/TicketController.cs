@@ -115,12 +115,16 @@ public class TicketController : ControllerBase
         return BadRequest();
     }
     [HttpGet("team")]
-    [Authorize(Roles = RolesConstants.manager)]
+    [Authorize(Roles = $"{RolesConstants.manager},{RolesConstants.admin}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> GetTeamTickets()
     {
-        var name =  User.GetUsername();
+        if (User.IsInRole(RolesConstants.admin))
+        {
+            return Ok("This endpoint is for managers only");
+        }
+        var name = User.GetUsername();
         var manager = await _userManager.FindByNameAsync(name);
         var tickets = await _ticketRepo.ListTeamTickets(manager.Id);
         return Ok(tickets);

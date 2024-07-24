@@ -41,12 +41,11 @@ public class TicketRepository : ITicketRepostiory
         }
     }
 
-    public async Task<ICollection<ReportDto>> ListMyTickets(string id)
+    public async Task<ICollection<MyTicketsDto>> ListMyTickets(string id)
     {
-        return await _context.Tickets.Where(t => t.WebUser.Id == id).Select(t => new ReportDto
+        return await _context.Tickets.Where(t => t.WebUser.Id == id).Select(t => new MyTicketsDto
         {
             Name = t.Name,
-            UserName = t.WebUser.UserName,
             Status = t.Status,
             DueDate = t.DueDate,
         }).ToListAsync();
@@ -117,7 +116,6 @@ public class TicketRepository : ITicketRepostiory
         return await _context.Tickets.Where(x => x.DueDate >= StartDate && x.DueDate <= endDate).Select(t => new ReportDto
         {
             Name = t.Name,
-            UserName = t.WebUser.UserName,
             DueDate = t.DueDate,
             Status = t.Status
         }).ToListAsync();

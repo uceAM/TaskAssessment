@@ -101,7 +101,7 @@ public class TicketController : ControllerBase
         }
         return BadRequest("Status cannot be validated"); //ideally never reach this
     }
-    [HttpGet("/reports")]
+    [HttpGet("reports")]
     [Authorize(Roles =RolesConstants.admin)]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
@@ -114,7 +114,7 @@ public class TicketController : ControllerBase
         }
         return BadRequest();
     }
-    [HttpGet("/team")]
+    [HttpGet("team")]
     [Authorize(Roles = RolesConstants.manager)]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
@@ -133,7 +133,7 @@ public class TicketController : ControllerBase
     {
         var name = User.GetUsername();
         var user = await _userManager.FindByNameAsync(name);
-        var tickets = await _ticketRepo.ListTeamTickets(user.Id);
+        var tickets = await _ticketRepo.ListMyTickets(user.Id);
         return Ok(tickets);
     }
 

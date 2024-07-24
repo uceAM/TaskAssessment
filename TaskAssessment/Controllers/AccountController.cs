@@ -5,6 +5,7 @@ using TaskAssessment.Dto.Account;
 using TaskAssessment.Interfaces;
 using TaskAssessment.Models;
 using TaskAssessment.Data.Constants;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace TaskAssessment.Controllers;
 
@@ -22,7 +23,7 @@ public class AccountController : ControllerBase
         _tokenService = tokenService;
     }
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] AccountDto NewAccount, string role)
+    public async Task<IActionResult> CreateUser([FromBody] AccountDto NewAccount, [FromQuery,BindRequired]string role)
     {
         try
         {

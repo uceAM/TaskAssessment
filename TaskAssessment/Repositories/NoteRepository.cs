@@ -48,9 +48,9 @@ public class NoteRepository : INoteRepository
         return await _context.Notes.FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public async Task<ICollection<Note>> GetNotes(int TicketId)
+    public async Task<ICollection<NoteDto>> GetNotes(int TicketId)
     {
-        return await _context.Notes.Where(n => n.TicketId == TicketId).ToListAsync();
+        return await _context.Notes.Where(n => n.TicketId == TicketId).Select(t=>new NoteDto { Text = t.Text}).ToListAsync();
     }
 
 

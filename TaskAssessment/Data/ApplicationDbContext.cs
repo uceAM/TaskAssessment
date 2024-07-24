@@ -38,7 +38,6 @@ public class ApplicationDbContext : IdentityDbContext<WebUser>
     }
     public DbSet<WebUser> WebUsers { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
-    public DbSet<TicketUser> TicketUsers { get; set; }
     public DbSet<Upload> Uploads { get; set; }
     public DbSet<Note> Notes { get; set; }
 }

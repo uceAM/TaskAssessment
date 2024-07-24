@@ -5,8 +5,8 @@ namespace TaskAssessment.Interfaces;
 
 public interface ITicketRepostiory
 {
-    public Task<ICollection<Ticket>> ListMyTickets(); //use name claim
-    public Task<ICollection<Ticket>> ListTeamTickets();
+    public Task<ICollection<ReportDto>> ListMyTickets(string id); //use name claim
+    public Task<ICollection<ReportDto>> ListTeamTickets(string managerId);
     public Task<Ticket?> GetById(int TicketId);
     public Task<bool> AddTicket(Ticket Ticket);
     public Task<bool> UpdateTicket(Ticket Ticket,TicketDto TicketDto);

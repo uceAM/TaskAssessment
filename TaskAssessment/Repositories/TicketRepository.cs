@@ -41,14 +41,26 @@ public class TicketRepository : ITicketRepostiory
         }
     }
 
-    public Task<ICollection<Ticket>> ListMyTickets()
+    public async Task<ICollection<ReportDto>> ListMyTickets(string id)
     {
-        throw new NotImplementedException();
+        return await _context.Tickets.Where(t => t.WebUser.Id == id).Select(t => new ReportDto
+        {
+            Name = t.Name,
+            UserName = t.WebUser.UserName,
+            Status = t.Status,
+            DueDate = t.DueDate,
+        }).ToListAsync();
     }
 
-    public Task<ICollection<Ticket>> ListTeamTickets()
+    public async Task<ICollection<ReportDto>> ListTeamTickets(string managerId)
     {
-        throw new NotImplementedException();
+        return await _context.Tickets.Where(t => t.WebUser.Manager.Id == managerId).Select(t => new ReportDto
+        {
+            Name = t.Name,
+            UserName = t.WebUser.UserName,
+            Status = t.Status,
+            DueDate = t.DueDate,
+        }).ToListAsync();
     }
 
     public async Task<bool> UpdateTicket(Ticket Ticket, TicketDto TicketDto)
@@ -102,12 +114,12 @@ public class TicketRepository : ITicketRepostiory
                 }
                 break;
         }
-        return _context.Tickets.Where(x => x.DueDate >= StartDate && x.DueDate <= endDate).Select(t => new ReportDto
+        return await _context.Tickets.Where(x => x.DueDate >= StartDate && x.DueDate <= endDate).Select(t => new ReportDto
         {
             Name = t.Name,
             UserName = t.WebUser.UserName,
             DueDate = t.DueDate,
             Status = t.Status
-        }).ToList();
+        }).ToListAsync();
     }
 }

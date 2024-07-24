@@ -7,6 +7,7 @@ using TaskAssessment.Dto.Ticket;
 using TaskAssessment.Interfaces;
 using TaskAssessment.Models;
 using TaskAssessment.Data.Constants;
+using TaskAssessment.Extensions;
 
 namespace TaskAssessment.Controllers;
 
@@ -113,5 +114,28 @@ public class TicketController : ControllerBase
         }
         return BadRequest();
     }
+    [HttpGet("/team")]
+    [Authorize(Roles = RolesConstants.manager)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> GetTeamTickets()
+    {
+        var name =  User.GetUsername();
+        var manager = await _userManager.FindByNameAsync(name);
+        var tickets = await _ticketRepo.ListTeamTickets(manager.Id);
+        return Ok(name);
+    }
+    [HttpGet]
+    [Authorize]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> GetMyickets()
+    {
+        var name = User.GetUsername();
+        var user = await _userManager.FindByNameAsync(name);
+        var tickets = await _ticketRepo.ListTeamTickets(user.Id);
+        return Ok(name);
+    }
+
 }
 
